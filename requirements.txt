@@ -1,14 +1,39 @@
+# Evolutionary Prompt Engineering for Text-to-Image Generation
+# Requirements for IEEE Conference Paper Implementation
+
+# Image Generation API
 fal-client>=0.5.0
+
+# Image Processing
 Pillow>=10.0.0
+
+# Numerical Computing
 numpy>=1.24.0
+scipy>=1.10.0
+
+# Deep Learning Framework
 torch>=2.0.0
 torchvision>=0.15.0
+
+# NLP Models (CLIP)
 transformers>=4.30.0
+
+# Perceptual Similarity (LPIPS)
 lpips>=0.1.4
+
+# LLM Integration (Gemini via Vertex AI)
+google-cloud-aiplatform>=1.38.0
+
+# Environment & Configuration
 python-dotenv>=1.0.0
+
+# Progress & Visualization
 tqdm>=4.65.0
 matplotlib>=3.7.0
-scipy>=1.10.0
+
+# Jupyter Notebooks
 jupyter>=1.0.0
-google-cloud-aiplatform>=1.38.0
+ipywidgets>=8.0.0
+
+# HTTP Requests
 requests>=2.31.0
