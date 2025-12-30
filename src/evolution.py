@@ -13,6 +13,7 @@ class GeneticOperators:
     def __init__(
         self,
         factory: GenomeFactory,
+        vocabulary_manager=None,
         mutation_rate: float = 0.4,
         add_probability: float = 0.3,
         remove_probability: float = 0.2
@@ -22,11 +23,13 @@ class GeneticOperators:
 
         Args:
             factory: GenomeFactory for creating/modifying genomes
+            vocabulary_manager: VocabularyManager for synonym-aware mutation (optional)
             mutation_rate: Probability of mutating each modifier
             add_probability: Probability of adding a new modifier during mutation
             remove_probability: Probability of removing a modifier during mutation
         """
         self.factory = factory
+        self.vocab_manager = vocabulary_manager
         self.mutation_rate = mutation_rate
         self.add_probability = add_probability
         self.remove_probability = remove_probability
@@ -93,6 +96,10 @@ class GeneticOperators:
         Returns:
             Mutated genome (new instance)
         """
+        # Use synonym-aware mutation if VocabularyManager is available
+        if self.vocab_manager:
+            return self.mutate_with_synonyms(genome)
+        
         mutated = genome.clone()
 
         # Mutate positive modifiers
@@ -110,6 +117,101 @@ class GeneticOperators:
         )
 
         return mutated
+    
+    def mutate_with_synonyms(self, genome: PromptGenome) -> PromptGenome:
+        """
+        Mutate using synonym mappings when available (ADAPTIVE VOCABULARY)
+        
+        Args:
+            genome: Genome to mutate
+            
+        Returns:
+            Mutated genome (new instance)
+        """
+        mutated = genome.clone()
+        
+        # Mutate positive modifiers with synonym awareness
+        mutated.positive_modifiers = self._mutate_modifiers_with_synonyms(
+            mutated.positive_modifiers,
+            self.factory.modifier_vocab,
+            self.factory.max_positive_modifiers
+        )
+        
+        # Mutate negative modifiers with synonym awareness
+        mutated.negative_modifiers = self._mutate_modifiers_with_synonyms(
+            mutated.negative_modifiers,
+            self.factory.negative_vocab,
+            self.factory.max_negative_modifiers
+        )
+        
+        return mutated
+    
+    def _mutate_modifiers_with_synonyms(
+        self,
+        modifiers: List[str],
+        vocab: List[str],
+        max_modifiers: int
+    ) -> List[str]:
+        """
+        Mutate modifiers using synonyms when available
+        
+        Args:
+            modifiers: Current modifiers
+            vocab: Vocabulary to sample from
+            max_modifiers: Maximum number of modifiers
+            
+        Returns:
+            Mutated modifiers list
+        """
+        new_modifiers = []
+        
+        # Mutate existing modifiers
+        for modifier in modifiers:
+            if random.random() < self.mutation_rate:
+                # Try synonym-based mutation first (50% chance if available)
+                synonyms = self.vocab_manager.get_synonyms(modifier) if self.vocab_manager else []
+                
+                if synonyms and random.random() < 0.5:
+                    # Use synonym (semantic mutation)
+                    replacement = random.choice(synonyms)
+                    if replacement not in new_modifiers and replacement in vocab:
+                        new_modifiers.append(replacement)
+                    else:
+                        # Synonym not available, keep original
+                        if modifier not in new_modifiers:
+                            new_modifiers.append(modifier)
+                else:
+                    # Random from vocabulary (explorative mutation)
+                    available = [m for m in vocab if m not in new_modifiers and m != modifier]
+                    if available:
+                        new_modifiers.append(random.choice(available))
+                    else:
+                        if modifier not in new_modifiers:
+                            new_modifiers.append(modifier)
+            else:
+                # No mutation, keep original
+                if modifier not in new_modifiers:
+                    new_modifiers.append(modifier)
+        
+        # Potentially add new modifiers
+        if len(new_modifiers) < max_modifiers and random.random() < self.add_probability:
+            available = [m for m in vocab if m not in new_modifiers]
+            if available:
+                num_to_add = random.randint(1, max_modifiers - len(new_modifiers))
+                num_to_add = min(num_to_add, len(available))
+                new_modifiers.extend(random.sample(available, num_to_add))
+        
+        # Potentially remove modifiers
+        if len(new_modifiers) > 0 and random.random() < self.remove_probability:
+            num_to_remove = random.randint(1, len(new_modifiers))
+            for _ in range(num_to_remove):
+                if new_modifiers:
+                    new_modifiers.pop(random.randrange(len(new_modifiers)))
+        
+        # Ensure no duplicates
+        new_modifiers = list(dict.fromkeys(new_modifiers))
+        
+        return new_modifiers
 
     def _mutate_modifiers(
         self,
