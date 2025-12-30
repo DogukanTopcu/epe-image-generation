@@ -115,37 +115,81 @@ def save_results(results: Dict[str, Any], experiment_name: str, output_dir: str 
 
 def create_modifier_vocab() -> List[str]:
     """
-    Create a curated vocabulary of style modifiers for prompt enhancement
+    Create an expanded vocabulary of style modifiers for prompt enhancement
 
     Returns:
         List of modifier strings categorized by type
     """
     modifiers = [
-        # Quality modifiers
-        "8k", "4k", "high resolution", "highly detailed", "sharp focus",
+        # Quality modifiers (expanded)
+        "8k", "4k", "16k", "high resolution", "highly detailed", "sharp focus",
         "ultra detailed", "professional", "masterpiece", "best quality",
+        "ultra high quality", "extremely detailed", "intricate details",
+        "fine details", "hyper detailed", "ultra sharp", "crisp details",
+        "award winning", "trending on artstation", "featured on behance",
 
-        # Style modifiers
+        # Style modifiers (expanded)
         "cinematic", "photorealistic", "digital art", "illustration",
         "oil painting", "watercolor", "concept art", "fantasy art",
-        "anime style", "studio ghibli style", "pixar style",
+        "anime style", "studio ghibli style", "pixar style", "disney style",
+        "hyperrealistic", "surrealism", "impressionism", "expressionism",
+        "pop art", "art nouveau", "art deco", "baroque", "renaissance",
+        "gothic", "steampunk", "cyberpunk", "vaporwave", "synthwave",
+        "retro", "vintage", "modern", "contemporary", "futuristic",
+        "minimalist", "maximalist", "abstract", "geometric",
+        "3d render", "cgi", "octane render", "unreal engine", "blender",
+        "vector art", "line art", "sketch", "charcoal drawing", "pencil sketch",
+        "manga style", "comic book style", "graphic novel", "storybook illustration",
 
-        # Lighting modifiers
+        # Lighting modifiers (expanded)
         "natural lighting", "soft lighting", "golden hour", "volumetric lighting",
         "dramatic lighting", "studio lighting", "rim lighting", "ambient lighting",
         "neon lighting", "moody lighting", "backlit", "side lighting",
+        "cinematic lighting", "high key lighting", "low key lighting",
+        "rembrandt lighting", "butterfly lighting", "split lighting",
+        "hard lighting", "diffused light", "specular highlights",
+        "god rays", "light rays", "sun rays", "lens flare",
+        "blue hour", "sunset lighting", "sunrise lighting", "twilight",
+        "candlelight", "firelight", "moonlight", "starlight",
+        "fluorescent", "incandescent", "LED lighting", "stage lighting",
+        "spotlight", "fill light", "key light", "hair light",
 
-        # Composition modifiers
+        # Composition modifiers (expanded)
         "wide angle", "close-up", "portrait", "aerial view", "bird's eye view",
         "low angle", "high angle", "centered composition", "rule of thirds",
+        "symmetrical", "asymmetrical", "dynamic composition", "balanced composition",
+        "diagonal composition", "leading lines", "framing", "negative space",
+        "full body shot", "medium shot", "extreme close-up", "establishing shot",
+        "over the shoulder", "dutch angle", "panoramic", "macro",
+        "fisheye", "telephoto", "35mm", "50mm", "85mm lens",
+        "eye level", "worm's eye view", "overhead shot",
 
-        # Technical modifiers
-        "depth of field", "bokeh", "HDR", "long exposure", "macro photography",
-        "tilt-shift", "motion blur", "lens flare",
+        # Technical modifiers (expanded)
+        "depth of field", "shallow depth of field", "deep depth of field",
+        "bokeh", "HDR", "long exposure", "macro photography",
+        "tilt-shift", "motion blur", "lens flare", "chromatic aberration",
+        "film grain", "vignette", "ray tracing", "global illumination",
+        "subsurface scattering", "ambient occlusion", "anti-aliasing",
+        "f/1.4", "f/2.8", "f/8", "ISO 100", "1/500 shutter speed",
 
-        # Atmosphere modifiers
+        # Atmosphere modifiers (expanded)
         "moody", "atmospheric", "ethereal", "dreamy", "vibrant colors",
-        "muted colors", "warm tones", "cool tones", "saturated",
+        "muted colors", "warm tones", "cool tones", "saturated", "desaturated",
+        "high contrast", "low contrast", "vivid", "pastel colors",
+        "monochromatic", "sepia", "black and white", "duotone",
+        "rich colors", "bold colors", "subtle colors", "earthy tones",
+        "neon colors", "candy colors", "jewel tones", "metallic",
+        "misty", "foggy", "hazy", "smoky", "dusty",
+        "rainy", "snowy", "sunny", "cloudy", "stormy",
+        "magical", "mystical", "enchanting", "whimsical", "romantic",
+        "epic", "grand", "majestic", "serene", "peaceful", "tranquil",
+        "dark", "light", "bright", "dim", "glowing",
+
+        # Subject enhancement modifiers
+        "elegant", "luxurious", "premium", "high-end", "sophisticated",
+        "polished", "refined", "sleek", "modern design", "classic design",
+        "detailed texture", "realistic texture", "smooth surface", "glossy",
+        "matte finish", "reflective", "transparent", "translucent",
     ]
 
     return modifiers
@@ -153,17 +197,44 @@ def create_modifier_vocab() -> List[str]:
 
 def create_negative_vocab() -> List[str]:
     """
-    Create a vocabulary of negative prompt terms
+    Create an expanded vocabulary of negative prompt terms
 
     Returns:
         List of negative modifier strings
     """
     negative = [
+        # Quality issues
         "blurry", "distorted", "low quality", "bad quality", "worst quality",
         "low resolution", "pixelated", "artifacts", "noise", "grainy",
+        "jpeg artifacts", "compression artifacts", "aliasing", "banding",
+        "fuzzy", "soft focus", "out of focus", "unfocused",
+
+        # Exposure issues
         "oversaturated", "undersaturated", "overexposed", "underexposed",
+        "too dark", "too bright", "washed out", "muddy colors",
+        "blown highlights", "crushed blacks", "flat lighting",
+
+        # Composition issues
+        "cropped", "out of frame", "cut off", "poorly framed",
+        "tilted", "unbalanced", "cluttered", "messy background",
+        "distracting background", "busy background",
+
+        # Anatomical/structural issues
         "ugly", "deformed", "disfigured", "bad anatomy", "bad proportions",
-        "watermark", "text", "signature", "cropped", "out of frame",
+        "malformed", "mutated", "extra limbs", "missing limbs",
+        "fused fingers", "too many fingers", "long neck", "distorted face",
+
+        # Unwanted elements
+        "watermark", "text", "signature", "logo", "copyright",
+        "username", "artist name", "border", "frame", "timestamp",
+
+        # Style issues
+        "amateurish", "unprofessional", "cheap looking", "tacky",
+        "cartoonish", "unrealistic", "fake looking", "plastic looking",
+
+        # Technical issues
+        "chromatic aberration", "lens distortion", "vignetting",
+        "motion blur", "camera shake", "double exposure",
     ]
 
     return negative
@@ -171,47 +242,125 @@ def create_negative_vocab() -> List[str]:
 
 def create_block_vocabularies() -> Dict[str, List[str]]:
     """
-    Create structured vocabularies for block-based genomes (Experiment 2)
+    Create expanded structured vocabularies for block-based genomes (Experiment 2)
 
     Returns:
         Dictionary with vocabulary lists for each block type
     """
     vocabularies = {
         "composition": [
+            # Camera angles
             "wide angle", "close-up", "portrait", "aerial view", "bird's eye view",
-            "low angle", "high angle", "centered composition", "rule of thirds",
-            "symmetrical", "asymmetrical", "full body", "medium shot", "extreme close-up",
-            "over the shoulder", "dutch angle", "panoramic", "macro",
+            "low angle", "high angle", "eye level", "worm's eye view", "overhead shot",
+            "dutch angle", "canted angle", "tilted frame",
+            # Framing
+            "centered composition", "rule of thirds", "golden ratio",
+            "symmetrical", "asymmetrical", "balanced composition", "dynamic composition",
+            "diagonal composition", "leading lines", "framing", "negative space",
+            # Shot types
+            "full body", "medium shot", "extreme close-up", "establishing shot",
+            "over the shoulder", "panoramic", "macro", "product shot",
+            "three-quarter view", "profile view", "front view", "back view",
+            # Lens effects
+            "fisheye", "telephoto", "35mm", "50mm", "85mm lens", "24mm wide",
+            "tilt-shift", "selective focus", "deep focus",
         ],
 
         "lighting": [
-            "natural lighting", "soft lighting", "golden hour", "volumetric lighting",
-            "dramatic lighting", "studio lighting", "rim lighting", "ambient lighting",
-            "neon lighting", "moody lighting", "backlit", "side lighting",
-            "harsh lighting", "diffused lighting", "sunset", "sunrise", "blue hour",
-            "candlelight", "moonlight", "overcast", "chiaroscuro",
+            # Natural lighting
+            "natural lighting", "soft lighting", "golden hour", "blue hour",
+            "sunset lighting", "sunrise lighting", "twilight", "daylight",
+            "overcast", "cloudy day", "bright sunny", "dappled light",
+            # Studio lighting
+            "studio lighting", "professional lighting", "product lighting",
+            "high key lighting", "low key lighting", "three-point lighting",
+            "rembrandt lighting", "butterfly lighting", "split lighting", "loop lighting",
+            "key light", "fill light", "hair light", "background light",
+            # Dramatic lighting
+            "dramatic lighting", "volumetric lighting", "rim lighting", "backlit",
+            "side lighting", "harsh lighting", "hard shadows", "soft shadows",
+            "chiaroscuro", "silhouette", "contre-jour",
+            # Atmospheric lighting
+            "moody lighting", "ambient lighting", "diffused lighting", "diffused light",
+            "god rays", "light rays", "sun rays", "lens flare",
+            "specular highlights", "reflections", "caustics",
+            # Artificial lighting
+            "neon lighting", "candlelight", "firelight", "moonlight", "starlight",
+            "fluorescent", "incandescent", "LED lighting", "stage lighting", "spotlight",
+            "warm light", "cool light", "colored lighting", "mixed lighting",
         ],
 
         "style": [
-            "photorealistic", "cinematic", "digital art", "illustration",
-            "oil painting", "watercolor", "concept art", "fantasy art",
-            "anime style", "studio ghibli style", "pixar style", "3d render",
-            "line art", "sketch", "charcoal", "pastel", "impressionist",
-            "surreal", "abstract", "minimalist", "maximalist",
+            # Photographic styles
+            "photorealistic", "hyperrealistic", "cinematic", "editorial",
+            "fashion photography", "commercial photography", "product photography",
+            "fine art photography", "documentary style", "journalistic",
+            # Digital art styles
+            "digital art", "digital painting", "3d render", "cgi",
+            "octane render", "unreal engine", "blender render", "v-ray",
+            # Traditional art styles
+            "oil painting", "watercolor", "acrylic painting", "gouache",
+            "pastel", "charcoal", "pencil sketch", "ink drawing",
+            "impressionist", "expressionist", "surrealist", "cubist",
+            # Illustration styles
+            "illustration", "concept art", "fantasy art", "sci-fi art",
+            "anime style", "manga style", "studio ghibli style", "pixar style",
+            "disney style", "dreamworks style", "comic book style", "graphic novel",
+            "storybook illustration", "children's book", "whimsical illustration",
+            # Design styles
+            "minimalist", "maximalist", "abstract", "geometric",
+            "art nouveau", "art deco", "baroque", "renaissance",
+            "gothic", "victorian", "retro", "vintage", "modern", "contemporary",
+            "futuristic", "steampunk", "cyberpunk", "vaporwave", "synthwave",
+            # Texture and finish
+            "matte", "glossy", "textured", "smooth", "rough",
+            "metallic", "glass-like", "crystal", "holographic",
         ],
 
         "quality": [
-            "8k", "4k", "high resolution", "highly detailed", "sharp focus",
-            "ultra detailed", "professional", "masterpiece", "best quality",
-            "HDR", "depth of field", "bokeh", "crisp", "crystal clear",
+            # Resolution
+            "8k", "4k", "16k", "high resolution", "ultra high resolution",
+            "extremely detailed", "highly detailed", "intricate details",
+            "fine details", "hyper detailed", "ultra detailed",
+            # Sharpness
+            "sharp focus", "ultra sharp", "crisp", "crystal clear", "tack sharp",
+            "razor sharp", "pin sharp",
+            # Professional quality
+            "professional", "masterpiece", "best quality", "award winning",
+            "trending on artstation", "featured on behance",
+            "museum quality", "gallery worthy", "exhibition quality",
+            # Technical quality
+            "HDR", "depth of field", "bokeh", "ray traced",
+            "global illumination", "subsurface scattering",
+            "anti-aliased", "clean render", "polished",
+            # Production quality
+            "commercial quality", "print quality", "publication ready",
+            "high fidelity", "pristine", "flawless", "immaculate",
         ],
 
         "negative": [
+            # Quality issues
             "blurry", "distorted", "low quality", "bad quality", "worst quality",
             "low resolution", "pixelated", "artifacts", "noise", "grainy",
+            "jpeg artifacts", "compression artifacts", "aliasing", "banding",
+            "fuzzy", "soft focus", "out of focus", "unfocused",
+            # Exposure issues
             "oversaturated", "undersaturated", "overexposed", "underexposed",
+            "too dark", "too bright", "washed out", "muddy colors",
+            "blown highlights", "crushed blacks", "flat lighting",
+            # Composition issues
+            "cropped", "out of frame", "cut off", "poorly framed",
+            "tilted", "unbalanced", "cluttered", "messy background",
+            "distracting background", "busy background",
+            # Structural issues
             "ugly", "deformed", "disfigured", "bad anatomy", "bad proportions",
-            "watermark", "text", "signature", "cropped", "out of frame",
+            "malformed", "mutated", "distorted", "warped",
+            # Unwanted elements
+            "watermark", "text", "signature", "logo", "copyright",
+            "username", "artist name", "border", "frame", "timestamp",
+            # Style issues
+            "amateurish", "unprofessional", "cheap looking", "tacky",
+            "cartoonish", "unrealistic", "fake looking", "plastic looking",
         ]
     }
 

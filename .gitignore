@@ -7,3 +7,5 @@ data/results/
 venv/
 .DS_Store
 vertex-key.json
+
+service-account-key.json
